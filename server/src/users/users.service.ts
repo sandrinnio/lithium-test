@@ -84,6 +84,7 @@ export class UsersService {
       `${user.firstName} ${user.lastName}`,
       user.resetPasswordToken,
     );
+    return 'reset_password_mail_was_sent';
   }
 
   async setPassword(resetPasswordToken: string, password: string) {

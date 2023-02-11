@@ -12,7 +12,7 @@ export class SendgridService {
       const templateData: TemplateInterface = {
         title: 'Verify Your Account',
         body: 'You are almost there! Please click on the button below to verify your account',
-        link: `${process.env.URL}/users/verification?verifyString=${verifyString}`,
+        link: `${process.env.CLIENT_URL}/verify-email?token=${verifyString}`,
         buttonText: 'Verify Email',
       };
       const result: string = await readAndRenderTemplate(
@@ -43,7 +43,7 @@ export class SendgridService {
       const templateData: TemplateInterface = {
         title: 'Reset Password',
         fullName,
-        link: `${process.env.URL}/users/set-password?resetPasswordToken=${resetPasswordToken}`,
+        link: `${process.env.CLIENT_URL}/set-password?token=${resetPasswordToken}`,
         buttonText: 'Reset Password',
       };
       const result: string = await readAndRenderTemplate(

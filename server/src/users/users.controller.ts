@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../utils/customs/current-user.decorator';
 import JwtAuthenticationGuard from '../utils/guards/jwt-auth.guard';
 import { EmailDto } from './dto/email.dto';
@@ -8,6 +17,8 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
+@ApiTags('users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -28,17 +39,19 @@ export class UsersController {
     return this.usersService.signIn(signInData);
   }
 
-  @Get('verification')
-  verifyUser(@Query() { verifyString }: { verifyString: string }) {
-    return this.usersService.verifyUser(verifyString);
-  }
-
   @Post('reset-password')
   resetPassword(@Body() { email }: EmailDto) {
     return this.usersService.resetPassword(email);
   }
 
-  @Get('set-password')
+  @ApiQuery({ required: true, name: 'verifyString' })
+  @Put('verification')
+  verifyUser(@Query() { verifyString }: { verifyString: string }) {
+    return this.usersService.verifyUser(verifyString);
+  }
+
+  @ApiQuery({ required: true, name: 'resetPasswordToken' })
+  @Put('set-password')
   setPassword(
     @Query() { resetPasswordToken }: { resetPasswordToken: string },
     @Body() { password }: PasswordDto,
