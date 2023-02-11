@@ -32,6 +32,9 @@ export class User {
   @Exclude()
   verifyString?: string;
 
+  @Column({ name: 'reset_password_token', nullable: true })
+  resetPasswordToken?: string;
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',

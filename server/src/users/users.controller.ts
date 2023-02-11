@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { CurrentUser } from '../utils/customs/current-user.decorator';
 import JwtAuthenticationGuard from '../utils/guards/jwt-auth.guard';
+import { EmailDto } from './dto/email.dto';
+import { PasswordDto } from './dto/password.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { User } from './entities/user.entity';
@@ -29,5 +31,18 @@ export class UsersController {
   @Get('verification')
   verifyUser(@Query() { verifyString }: { verifyString: string }) {
     return this.usersService.verifyUser(verifyString);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() { email }: EmailDto) {
+    return this.usersService.resetPassword(email);
+  }
+
+  @Get('set-password')
+  setPassword(
+    @Query() { resetPasswordToken }: { resetPasswordToken: string },
+    @Body() { password }: PasswordDto,
+  ) {
+    return this.usersService.setPassword(resetPasswordToken, password);
   }
 }

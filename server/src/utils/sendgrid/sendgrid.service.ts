@@ -33,4 +33,35 @@ export class SendgridService {
       console.error('sendVerificationMail: ', error);
     }
   }
+
+  async sendResetPasswordMail(
+    email: string,
+    fullName: string,
+    resetPasswordToken: string,
+  ) {
+    try {
+      const templateData: TemplateInterface = {
+        title: 'Reset Password',
+        fullName,
+        link: `${process.env.URL}/users/set-password?resetPasswordToken=${resetPasswordToken}`,
+        buttonText: 'Reset Password',
+      };
+      const result: string = await readAndRenderTemplate(
+        'resetPassword',
+        templateData,
+      );
+      const msg = {
+        to: email,
+        from: {
+          email: 'sandrokakashvili@gmail.com',
+          name: 'Lithium Test',
+        },
+        subject: 'Reset your password.',
+        html: result,
+      };
+      await this.sendgridService.send(msg);
+    } catch (error) {
+      console.error('sendResetPasswordMail: ', error.message);
+    }
+  }
 }

@@ -31,4 +31,23 @@ export class UsersRepository {
     const newUser = this.usersRepository.create(userData);
     return this.usersRepository.save(newUser);
   }
+
+  async verifyResetPasswordToken(
+    resetPasswordToken: string,
+    hashedPassowrd: string,
+  ) {
+    const user = await this.usersRepository.findOneBy({ resetPasswordToken });
+    if (!user) {
+      throw new NotFoundException('user_does_not_exist');
+    }
+    user.resetPasswordToken = null;
+    user.password = hashedPassowrd;
+    return this.usersRepository.save(user);
+  }
+
+  async resetPassword(email: string, resetPasswordToken: string) {
+    const user = await this.getByEmail(email);
+    user.resetPasswordToken = resetPasswordToken;
+    return this.usersRepository.save(user);
+  }
 }

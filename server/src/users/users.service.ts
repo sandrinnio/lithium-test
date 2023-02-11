@@ -73,6 +73,27 @@ export class UsersService {
     return { user, token };
   }
 
+  async resetPassword(email: string) {
+    const resetPasswordToken = await generateRandomString();
+    const user = await this.usersRepository.resetPassword(
+      email.toLowerCase().trim(),
+      resetPasswordToken,
+    );
+    this.sendgridService.sendResetPasswordMail(
+      user.email,
+      `${user.firstName} ${user.lastName}`,
+      user.resetPasswordToken,
+    );
+  }
+
+  async setPassword(resetPasswordToken: string, password: string) {
+    const hashedPassowrd = await bcrypt.hash(password, 10);
+    return this.usersRepository.verifyResetPasswordToken(
+      resetPasswordToken,
+      hashedPassowrd,
+    );
+  }
+
   private async validatePassword(hashedPassword: string, password: string) {
     const isPasswordMatching = await bcrypt.compare(password, hashedPassword);
     if (!isPasswordMatching) {
