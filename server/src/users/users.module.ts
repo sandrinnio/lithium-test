@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SendgridModule } from '../utils/sendgrid/sendgrid.module';
 import { User } from './entities/user.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersController } from './users.controller';
@@ -18,6 +19,7 @@ import { UsersService } from './users.service';
         expiresIn: process.env.JWT_EXPIRES_IN,
       },
     }),
+    SendgridModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, JwtStrategy, PassportModule],

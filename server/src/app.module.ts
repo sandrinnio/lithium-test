@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { UsersModule } from './users/users.module';
+import { SendgridModule } from './utils/sendgrid/sendgrid.module';
 
 @Module({
   imports: [
@@ -17,7 +19,11 @@ import { UsersModule } from './users/users.module';
       synchronize: true,
       uuidExtension: 'pgcrypto',
     }),
+    SendGridModule.forRoot({
+      apikey: process.env.SENDGRID_API_KEY,
+    }),
     UsersModule,
+    SendgridModule,
   ],
   controllers: [],
   providers: [],

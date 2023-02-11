@@ -17,6 +17,16 @@ export class UsersRepository {
     return user;
   }
 
+  async verifyUser(verifyString: string) {
+    const user = await this.usersRepository.findOneBy({ verifyString });
+    if (!user) {
+      throw new NotFoundException('user_does_not_exist');
+    }
+    user.verified = true;
+    user.verifyString = null;
+    return this.usersRepository.save(user);
+  }
+
   create(userData: User) {
     const newUser = this.usersRepository.create(userData);
     return this.usersRepository.save(newUser);

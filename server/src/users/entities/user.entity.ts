@@ -25,6 +25,13 @@ export class User {
   @Exclude()
   password: string;
 
+  @Column({ default: false })
+  verified?: boolean;
+
+  @Column({ nullable: true, name: 'verify_string', unique: true })
+  @Exclude()
+  verifyString?: string;
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',

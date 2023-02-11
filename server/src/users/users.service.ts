@@ -1,11 +1,14 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { generateRandomString } from '../utils/generate-random-string';
+import { SendgridService } from '../utils/sendgrid/sendgrid.service';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 import { TokenPayload } from './interfaces/token-payload.interface';
@@ -17,17 +20,24 @@ export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
+    private readonly sendgridService: SendgridService,
   ) {}
 
   async signUp(signUpData: SignUpDto) {
     try {
       const hashedPassowrd = await bcrypt.hash(signUpData.password, 10);
+      const verifyString = await generateRandomString();
       const createdUser = await this.usersRepository.create({
         ...signUpData,
+        verifyString,
         email: signUpData.email.toLowerCase().trim(),
         password: hashedPassowrd,
       });
-      return createdUser;
+      this.sendgridService.sendVerificationMail(
+        createdUser.email,
+        createdUser.verifyString,
+      );
+      return 'verification_mail_was_sent';
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('user_with_this_email_is_already_exists');
@@ -42,7 +52,20 @@ export class UsersService {
       email.toLowerCase().trim(),
     );
     await this.validatePassword(user.password, password);
+    if (!user.verified) {
+      throw new ForbiddenException('user_not_verified');
+    }
     const payload: TokenPayload = { email };
+    const token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+    return { user, token };
+  }
+
+  async verifyUser(verifyString: string): Promise<UserPayload> {
+    const user = await this.usersRepository.verifyUser(verifyString);
+    const payload: TokenPayload = { email: user.email };
     const token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_EXPIRES_IN,

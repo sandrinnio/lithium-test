@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { CurrentUser } from '../utils/customs/current-user.decorator';
 import JwtAuthenticationGuard from '../utils/guards/jwt-auth.guard';
 import { SignInDto } from './dto/sign-in.dto';
@@ -24,5 +24,10 @@ export class UsersController {
   @Post('sign-in')
   signIn(@Body() signInData: SignInDto) {
     return this.usersService.signIn(signInData);
+  }
+
+  @Get('verification')
+  verifyUser(@Query() { verifyString }: { verifyString: string }) {
+    return this.usersService.verifyUser(verifyString);
   }
 }
