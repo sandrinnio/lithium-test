@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { Verify, SignIn, SignUp, Forgot } from "./components";
+import { Verify, SignIn, SignUp, Forgot, SetPassword } from "./components";
 import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
@@ -18,8 +18,9 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/verify" element={<Verify />} />
+        <Route path="/verify-email" element={<Verify />} />
         <Route path="/forgot" element={<Forgot />} />
+        <Route path="/set-password" element={<SetPassword />} />
       </Routes>
     </Router>
   </React.StrictMode>

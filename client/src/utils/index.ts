@@ -35,6 +35,10 @@ export const forgotSchema = yup.object().shape({
   email: yup.string().required().email(),
 });
 
+export const setPasswordSchema = yup.object().shape({
+  password: yup.string().required().min(6).max(32),
+});
+
 export const useStyles = makeStyles((theme) => ({
   heading: {
     textAlign: "center",
