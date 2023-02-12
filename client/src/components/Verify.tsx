@@ -38,8 +38,9 @@ export const Verify = () => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/");
+    } else {
+      verifyUser();
     }
-    verifyUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

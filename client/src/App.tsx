@@ -1,24 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography } from "@material-ui/core";
-import { useStyles } from "./utils";
+import { IUser, useStyles } from "./utils";
 
 export const App = () => {
   const { heading } = useStyles();
 
+  const [user, setUser] = useState<IUser>();
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
+    const user = localStorage.getItem("user");
+    if (!user) {
       navigate("/sign-in");
+    } else {
+      setUser(JSON.parse(user));
     }
   }, [navigate]);
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="lg">
       <Typography className={heading} variant="h3">
-        Home
+        {user && (
+          <>
+            <p>
+              Hey {user.firstName} {user.lastName}!
+            </p>
+            <p>
+              {user.verified
+                ? "Your email is verified."
+                : "Your email is not verified."}
+            </p>
+          </>
+        )}
       </Typography>
     </Container>
   );

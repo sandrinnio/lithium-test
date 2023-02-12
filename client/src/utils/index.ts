@@ -1,6 +1,17 @@
 import { makeStyles } from "@material-ui/core";
 import * as yup from "yup";
 
+export interface IUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  verified: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ISignUpFormInput {
   email: string;
   firstName: string;

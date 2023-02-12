@@ -33,6 +33,7 @@ export class User {
   verifyString?: string;
 
   @Column({ name: 'reset_password_token', nullable: true })
+  @Exclude()
   resetPasswordToken?: string;
 
   @CreateDateColumn({
