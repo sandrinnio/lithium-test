@@ -1,13 +1,25 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { SignIn, SignUp } from "./components";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, Typography } from "@material-ui/core";
+import { useStyles } from "./utils";
 
 export const App = () => {
+  const { heading } = useStyles();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/sign-in");
+    }
+  }, [navigate]);
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-in" element={<SignIn />} />
-      </Routes>
-    </Router>
+    <Container maxWidth="xs">
+      <Typography className={heading} variant="h3">
+        Home
+      </Typography>
+    </Container>
   );
 };

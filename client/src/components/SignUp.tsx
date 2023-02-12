@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
@@ -6,6 +8,8 @@ import { ISignUpFormInput, signUpSchema, useStyles } from "../utils";
 export const SignUp = () => {
   const { heading, submitButton } = useStyles();
 
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -13,6 +17,13 @@ export const SignUp = () => {
   } = useForm<ISignUpFormInput>({
     resolver: yupResolver(signUpSchema),
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const onSubmit = (data: ISignUpFormInput) => {
     console.log("data: ", data);
@@ -75,6 +86,13 @@ export const SignUp = () => {
           Sign Up
         </Button>
       </form>
+      <hr />
+      <>
+        Have an account?{" "}
+        <Link className="text-link" to="/sign-in">
+          Sign in
+        </Link>
+      </>
     </Container>
   );
 };
