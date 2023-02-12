@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
-import { ISignUpFormInput, signUpSchema, useStyles } from "../utils";
+import { IUserFormInput, signUpSchema, useStyles } from "../utils";
 
 export const SignUp = () => {
   const { heading, submitButton } = useStyles();
@@ -18,7 +18,7 @@ export const SignUp = () => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ISignUpFormInput>({
+  } = useForm<IUserFormInput>({
     resolver: yupResolver(signUpSchema),
   });
 
@@ -29,7 +29,7 @@ export const SignUp = () => {
     }
   }, [navigate]);
 
-  const onSubmit = async (signUpData: ISignUpFormInput) => {
+  const onSubmit = async (signUpData: IUserFormInput) => {
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/users/sign-up`,

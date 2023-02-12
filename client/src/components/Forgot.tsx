@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
-import { IUserFormInput, signInSchema, useStyles } from "../utils";
+import { IUserFormInput, forgotSchema, useStyles } from "../utils";
 
-export const SignIn = () => {
+export const Forgot = () => {
   const { heading, submitButton } = useStyles();
 
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ export const SignIn = () => {
     formState: { errors },
     reset,
   } = useForm<IUserFormInput>({
-    resolver: yupResolver(signInSchema),
+    resolver: yupResolver(forgotSchema),
   });
 
   useEffect(() => {
@@ -29,15 +30,13 @@ export const SignIn = () => {
     }
   }, [navigate]);
 
-  const onSubmit = async (signInData: IUserFormInput) => {
+  const onSubmit = async (forgotData: IUserFormInput) => {
     try {
-      const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/users/sign-in`,
-        signInData
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/users/reset-password`,
+        forgotData
       );
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/");
+      setMessage("Reset link sent to your email");
     } catch (error) {
       console.error(error);
       setError("Wrong credentials provided");
@@ -49,7 +48,8 @@ export const SignIn = () => {
   return (
     <Container maxWidth="xs">
       <Typography className={heading} variant="h3">
-        Sign In Form
+        Reset Password
+        {message && <p style={{ color: "green" }}>{message}</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -63,17 +63,6 @@ export const SignIn = () => {
           fullWidth
           required
         />
-        <TextField
-          {...register("password")}
-          variant="outlined"
-          margin="normal"
-          label="Password"
-          helperText={errors.password?.message}
-          error={!!errors.password?.message}
-          type="password"
-          fullWidth
-          required
-        />
         <Button
           type="submit"
           fullWidth
@@ -81,16 +70,16 @@ export const SignIn = () => {
           color="primary"
           className={submitButton}
         >
-          Sign In
+          Send Reset Link
         </Button>
       </form>
       <hr />
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div>
-          No Account? <Link to="/sign-up">Sign up </Link>
-        </div>
-        <Link to="/forgot">Reset password</Link>
-      </div>
+      <>
+        Go back to{" "}
+        <Link className="text-link" to="/sign-in">
+          Sign in
+        </Link>
+      </>
     </Container>
   );
 };

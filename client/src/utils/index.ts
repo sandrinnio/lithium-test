@@ -12,16 +12,11 @@ export interface IUser {
   updatedAt: Date;
 }
 
-export interface ISignUpFormInput {
-  email: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-}
-
-export interface ISignInFormInput {
-  email: string;
-  password: string;
+export interface IUserFormInput {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  password?: string;
 }
 
 export const signUpSchema = yup.object().shape({
@@ -34,6 +29,10 @@ export const signUpSchema = yup.object().shape({
 export const signInSchema = yup.object().shape({
   email: yup.string().required().email(),
   password: yup.string().required().min(6).max(32),
+});
+
+export const forgotSchema = yup.object().shape({
+  email: yup.string().required().email(),
 });
 
 export const useStyles = makeStyles((theme) => ({
