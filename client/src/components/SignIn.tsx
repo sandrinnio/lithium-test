@@ -1,27 +1,27 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
-import { ISignUpFormInput, signUpSchema, useStyles } from "../utils";
+import { ISignInFormInput, signInSchema, useStyles } from "../utils";
 
-export const SignUp = () => {
+export const SignIn = () => {
   const { heading, submitButton } = useStyles();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ISignUpFormInput>({
-    resolver: yupResolver(signUpSchema),
+  } = useForm<ISignInFormInput>({
+    resolver: yupResolver(signInSchema),
   });
 
-  const onSubmit = (data: ISignUpFormInput) => {
+  const onSubmit = (data: ISignInFormInput) => {
     console.log("data: ", data);
   };
 
   return (
     <Container maxWidth="xs">
       <Typography className={heading} variant="h3">
-        Sign Up Form
+        Sign In Form
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
@@ -31,26 +31,6 @@ export const SignUp = () => {
           label="Email"
           helperText={errors.email?.message}
           error={!!errors.email?.message}
-          fullWidth
-          required
-        />
-        <TextField
-          {...register("firstName")}
-          variant="outlined"
-          margin="normal"
-          label="First Name"
-          helperText={errors.firstName?.message}
-          error={!!errors.firstName?.message}
-          fullWidth
-          required
-        />
-        <TextField
-          {...register("lastName")}
-          variant="outlined"
-          margin="normal"
-          label="Last Name"
-          helperText={errors.lastName?.message}
-          error={!!errors.lastName?.message}
           fullWidth
           required
         />
@@ -72,7 +52,7 @@ export const SignUp = () => {
           color="primary"
           className={submitButton}
         >
-          Sign Up
+          Sign In
         </Button>
       </form>
     </Container>
