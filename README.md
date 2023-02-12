@@ -26,4 +26,14 @@ After you have completed the task, please send us a .zip file of the repo, but f
 
 **Why did you choose the tech you did?**
 
-`Don't worry about detailing every single package used, but try and justify some of your choices and your reason for making them. We want people who think in features, and how they impact the wider systems going forward, so we expect you to make reasoned decisions with intent!`
+`I chose Nest.js as the server framework because of its modular structure and ability to handle a large number of requests efficiently. Nest.js provides a powerful set of libraries and tools that make it easy to create scalable and maintainable server applications. It also provides a clean and intuitive way to organize the codebase, which makes it easy to work with and extend. Also it brings Typescript support out of the box, which is a great plus.
+
+I chose PostgreSQL as the database because of its reliability and ability to handle complex data structures. It also has great support for data relationships, making it a good choice for building scalable applications. I used TypeORM as an ORM to interact with the database, as it provides a clean and efficient way to manage database operations and maintain the data model.
+
+JWT and Passport were chosen for authorization and authentication as they are well-established, secure and flexible solutions. JWT provides a way to securely transmit user information between the client and server, while Passport provides a convenient way to integrate multiple authentication strategies into the application.
+
+For sending email verification links and reset password links, I used Sendgrid as the mail service. It provides a simple and effective way to send emails and has a robust infrastructure to ensure delivery of emails. I used the MJML library for styling the emails, as it provides an easy-to-use, responsive and customizable framework for creating beautiful emails.
+
+On the client side, I chose React.js with Typescript as it is a popular and powerful combination for building interactive and responsive user interfaces. Axios was used for making requests to the server, as it provides a simple and efficient way to make HTTP requests. I used the YUP library for form validation, as it provides a concise and flexible way to validate user input. For the form, I used the react-hook-form package, as it provides a clean and intuitive way to manage forms in React.
+
+For design, I used the Material UI library as it provides a comprehensive set of pre-designed components that follow the Material Design guidelines. This made it easy to create a visually appealing and consistent design throughout the application.`
