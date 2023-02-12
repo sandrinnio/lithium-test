@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Typography, TextField, Button } from "@material-ui/core";
 import { ISignUpFormInput, signUpSchema, useStyles } from "../utils";
@@ -8,12 +9,15 @@ import { ISignUpFormInput, signUpSchema, useStyles } from "../utils";
 export const SignUp = () => {
   const { heading, submitButton } = useStyles();
 
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ISignUpFormInput>({
     resolver: yupResolver(signUpSchema),
   });
@@ -25,14 +29,26 @@ export const SignUp = () => {
     }
   }, [navigate]);
 
-  const onSubmit = (data: ISignUpFormInput) => {
-    console.log("data: ", data);
+  const onSubmit = async (signUpData: ISignUpFormInput) => {
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/users/sign-up`,
+        signUpData
+      );
+      navigate("/sign-in");
+    } catch (error) {
+      console.error(error);
+      setError("Email already exists");
+    } finally {
+      reset();
+    }
   };
 
   return (
     <Container maxWidth="xs">
       <Typography className={heading} variant="h3">
         Sign Up Form
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField

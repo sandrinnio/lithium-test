@@ -24,6 +24,7 @@ export const Verify = () => {
       );
       if (data.user.verified) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/");
       } else {
         navigate("/sign-up");
@@ -35,8 +36,8 @@ export const Verify = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const user = localStorage.getItem("user");
+    if (user && JSON.parse(user).verified) {
       navigate("/");
     } else {
       verifyUser();

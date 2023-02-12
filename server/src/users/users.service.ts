@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ConflictException,
-  ForbiddenException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -52,9 +51,6 @@ export class UsersService {
       email.toLowerCase().trim(),
     );
     await this.validatePassword(user.password, password);
-    if (!user.verified) {
-      throw new ForbiddenException('user_not_verified');
-    }
     const payload: TokenPayload = { email };
     const token = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
