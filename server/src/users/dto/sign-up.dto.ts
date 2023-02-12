@@ -15,11 +15,15 @@ export class SignUpDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(25)
   @IsString()
   firstName: string;
 
   @ApiProperty()
   @IsNotEmpty()
+  @MinLength(2)
+  @MaxLength(25)
   @IsString()
   lastName: string;
 
